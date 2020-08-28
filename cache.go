@@ -64,6 +64,19 @@ func (cache *Cache) getItem(key string) (*item, bool, bool) {
 	return item, exists, expirationNotification
 }
 
+func (cache *Cache) GetAll() map[string]interface{}{
+	itemsMap := make(map[string]interface{})
+
+	for k, v := range cache.items{
+		if v.expired(){
+			continue
+		}
+		itemsMap[k]=v.data
+	}
+
+	return itemsMap
+}
+
 func (cache *Cache) startExpirationProcessing() {
 	timer := time.NewTimer(time.Hour)
 	for {
